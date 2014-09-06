@@ -42,13 +42,13 @@ $("#add-item").on('click', function (e) {
 	var id = currentItemId++
 
 	var div = $("<div>").addClass("row extra-space").attr("id", "item-" + id),
-		art = $("<p>").addClass("col-md-11 col-xs-11").text("artikel").attr("contenteditable", "true"),
-		units = $("<p>").addClass("col-md-3 col-xs-3").text("1").attr("contenteditable", "true")
+		art = $("<p>").addClass("col-md-15 col-xs-11").text("artikel").attr("contenteditable", "true"),
+		units = $("<p>").addClass("col-md-2 col-xs-3").text("1").attr("contenteditable", "true")
 				.attr("id", "item-" + id + "-units"),
-		unit = $("<p>").addClass("col-md-3 col-xs-3").text("st").attr("contenteditable", "true"),
-		price = $("<p>").addClass("col-md-3 col-xs-3").text("0").attr("contenteditable", "true")
+		unit = $("<p>").addClass("col-md-2 col-xs-3").text("st").attr("contenteditable", "true"),
+		price = $("<p>").addClass("col-md-2 col-xs-3").text("0").attr("contenteditable", "true")
 				.attr("id", "item-" + id + "-price"),
-		total = $("<p>").addClass("col-md-3 col-xs-3").text("0").attr("id", "item-" + id + "-total"),
+		total = $("<p>").addClass("col-md-2 col-xs-3").text("0").attr("id", "item-" + id + "-total"),
 		remove = $("<span>").addClass("glyphicon glyphicon-minus btn btn-xs btn-danger no-print remove col-xs-1")
 
 	div.append(remove, art, units, unit, price, total)
