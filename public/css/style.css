@@ -1,0 +1,45 @@
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #333;
+	background-color: #fff;
+}
+
+.faktura {
+	background: #fff;
+	border: 1px solid #D0D0D0;
+	padding: 20px;
+	box-shadow: 2px 2px 5px #DDD;
+}
+
+.faktura-header {
+	border-bottom: 1px solid black;
+}
+
+.faktura-footer {
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+}
+
+.row-spacing {
+	margin: 1em 0;
+}
+
+@media print {    
+	.no-print, .no-print * {
+		display: none !important;
+	}
+
+	.extra-space {
+		width: 45.83333333%;
+	}
+}
+
+h4 {
+	margin-bottom: 0.5em;
+}
+
+.remove {
+	float: left;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>Faktura</title>
+
+    	<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/style.css">
+
+		<!--[if lt IE 9]>
+	    	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	    	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	  	<![endif]-->
+	</head>
+		
+
+	<body>
+		<div class="page-style">
+			<div class="container faktura">
+				<div class="row">
+					<h1 contenteditable="true" class="text-right col-md-24 col-xs-24">FAKTURA #1234567890</h1>
+				</div>
+
+				<!-- Company information -->
+				<div class="row">
+					<address contenteditable="true" class="col-md-12 col-xs-8">
+						<h4 class="text-uppercase">Contractor</h4>
+						<strong>Your Company</strong><br>
+					  	Your Company Address<br>
+					  	Your Company Country<br>
+					</address>
+
+					<div contenteditable="true" class="col-md-6 col-xs-8">
+						<h4 class="text-uppercase">Billing Address</h4>
+						<address class="box">
+						  <strong>Their Company</strong><br>
+					  	Their Company Address<br>
+					  	Their Company Country<br>
+						</address>
+					</div>
+
+					<div class="col-md-6 col-xs-8 text-right">
+						<div style="margin-top: 0.5em;" contenteditable="true">
+							<strong>Invoice date:</strong> 2014-01-01<br>
+							<strong>Due date:</strong> 2014-02-01
+						</div>
+					</div>
+				</div>
+
+				<!-- Contact references -->
+				<div class="row">
+					<div class="col-md-12 col-xs-8">
+						<address contenteditable="true">
+							<strong class="text-uppercase">Your reference</strong><br>
+							Someone on your company
+						</address>
+					</div>
+					<div class="col-md-6 col-xs-8">
+						<address contenteditable="true">
+							<strong class="text-uppercase">Our reference</strong><br>
+							Someone on their company
+						</address>
+					</div>
+				</div>
+
+				<div class="row-spacing"></div>
+
+				<div class="faktura-header">
+					<div class="row">
+						<p contenteditable="true" class="col-md-16 col-xs-11">Product</p>
+						<p contenteditable="true" class="col-md-2 col-xs-3">Qty</p>
+						<p contenteditable="true" class="col-md-2 col-xs-3">Unit</p>
+						<p contenteditable="true" class="col-md-2 col-xs-3">Price</p>
+						<p contenteditable="true" class="col-md-2 col-xs-4">Total</p>
+					</div>
+				</div>
+
+				<div id="items">
+					<!-- items will be appended here -->
+				</div>
+
+				<button type="button" id="add-item" class="btn no-print">Add Item</button>
+
+				<div class="faktura-footer">
+					<div class="row">
+						<div contenteditable="true" class="col-md-20 col-xs-20 text-right">
+							<p>Sum:</p>
+							<p>VAT:</p>
+							<p>Grand Total:</p>
+						</div>
+
+						<div class="col-md-4 col-xs-4 text-left">
+							<p id="sum">0</p>
+							<p contenteditable="true" id="vat">25%</p>
+							<p id="grand-total">0</p>
+						</div>
+					</div>
+				</div>
+
+				<div contenteditable="true">notes</div>
+			</div>
+
+			<div class="container no-print">
+				<div class="row row-spacing">
+					<button id="generate" type="button" class="btn btn-primary col-md-4 col-xs-4">Print</button>
+					<form class="form-inline col-md-2 col-xs-2">
+						<input id="currency" class="form-control" value="SEK"/>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="/js/script.js"></script>
+	</body>
+</html>
