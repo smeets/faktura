@@ -34,6 +34,11 @@ body {
 	.extra-space {
 		width: 45.83333333%;
 	}
+
+	.faktura {
+		box-shadow: none !important;
+		border: none !important;
+	}
 }
 
 h4 {
