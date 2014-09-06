@@ -3,6 +3,17 @@ faktura
 
 Simple, bootstrap-powered site for creating invoices.
 
+features
+========
+
+* somewhat editable layout
+* fully editable fields
+* auto-calculated sums
+* supports all kinds of currencies
+* support for VAT
+* support for shipping (not yet implemented)
+* remembers some stuff locally (not yet implemented)
+
 the process
 ===========
 

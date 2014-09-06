@@ -34,6 +34,10 @@ function calculateTotal(){
 	$("#grand-total").text(formatValue(sum + sum * vat * 0.01) + " " + $("#currency").val())
 }
 
+$("#print").on('click', function (e) {
+	window.print()
+})
+
 $("#add-item").on('click', function (e) {
 	var id = currentItemId++
 
