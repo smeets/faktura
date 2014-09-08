@@ -18,21 +18,21 @@
 
 	<body>
 		<div class="page-style row-spacing">
-			<div class="container faktura">
+			<div id="wrap" class="container faktura">
 				<div class="row">
-					<h1 contenteditable="true" class="text-right col-md-24 col-xs-24">INVOICE #1234567890</h1>
+					<h1 contenteditable="true" class="text-right col-xs-24">INVOICE #1234567890</h1>
 				</div>
 
 				<!-- Company information -->
 				<div class="row">
-					<address contenteditable="true" class="col-md-12 col-xs-8">
+					<address id="contractor" contenteditable="true" class="col-xs-8">
 						<h4 class="text-uppercase">Contractor</h4>
 						<strong>Your Company</strong><br>
 					  	Your Company Address<br>
 					  	Your Company Country<br>
 					</address>
 
-					<div contenteditable="true" class="col-md-6 col-xs-8">
+					<div contenteditable="true" class="col-xs-8">
 						<h4 class="text-uppercase">Billing Address</h4>
 						<address class="box">
 						  <strong>Their Company</strong><br>
@@ -41,7 +41,7 @@
 						</address>
 					</div>
 
-					<div class="col-md-6 col-xs-8 text-right">
+					<div class="col-xs-8 text-right">
 						<div style="margin-top: 0.5em;" contenteditable="true">
 							<strong>Invoice date:</strong> 2014-01-01<br>
 							<strong>Due date:</strong> 2014-02-01
@@ -51,13 +51,13 @@
 
 				<!-- Contact references -->
 				<div class="row">
-					<div class="col-md-12 col-xs-8">
+					<div class="col-xs-8">
 						<address contenteditable="true">
 							<strong class="text-uppercase">Your reference</strong><br>
 							Someone on your company
 						</address>
 					</div>
-					<div class="col-md-6 col-xs-8">
+					<div class="col-xs-8">
 						<address contenteditable="true">
 							<strong class="text-uppercase">Our reference</strong><br>
 							Someone on their company
@@ -67,13 +67,13 @@
 
 				<div class="row-spacing"></div>
 
-				<div class="faktura-header">
+				<div id="faktura-header" class="faktura-header">
 					<div class="row">
-						<p contenteditable="true" class="col-md-16 col-xs-11">Product</p>
-						<p contenteditable="true" class="col-md-2 col-xs-3">Qty</p>
-						<p contenteditable="true" class="col-md-2 col-xs-3">Unit</p>
-						<p contenteditable="true" class="col-md-2 col-xs-3">Price</p>
-						<p contenteditable="true" class="col-md-2 col-xs-4">Total</p>
+						<p contenteditable="true" class="col-xs-11">Product</p>
+						<p contenteditable="true" class="col-xs-3">Qty</p>
+						<p contenteditable="true" class="col-xs-3">Unit</p>
+						<p contenteditable="true" class="col-xs-3">Price</p>
+						<p contenteditable="true" class="col-xs-4">Total</p>
 					</div>
 				</div>
 
@@ -81,40 +81,151 @@
 					<!-- items will be appended here -->
 				</div>
 
-				<button type="button" id="add-item" class="btn no-print">Add Item</button>
+				<button type="button" id="add-item" class="btn btn-success btn-xs no-print">Add Item</button>
 
 				<div class="faktura-footer">
-					<div class="row">
-						<div contenteditable="true" class="col-md-20 col-xs-20 text-right">
+					<div class="row row-spacing">
+						<div id="faktura-footer" contenteditable="true" class="col-xs-20 text-right">
 							<p>Sum:</p>
-							<p>VAT:</p>
+							<p id="vat-1">VAT (-):</p>
 							<p>Grand Total:</p>
 						</div>
 
-						<div class="col-md-4 col-xs-4 text-left">
-							<p id="sum">0</p>
-							<p contenteditable="true" id="vat">25%</p>
-							<p id="grand-total">0</p>
+						<div class="col-xs-4 text-left">
+							<p id="sum">-</p>
+							<p id="vat-2" id="vat">-</p>
+							<p id="grand-total">-</p>
 						</div>
 					</div>
 				</div>
 
 				<!-- Payment details -->
 
-				<div contenteditable="true">notes</div>
+				<div class="row-spacing">
+					<div>
+						<h4 contenteditable="true" class="text-uppercase">Payment</h4>
+						<div class="row">
+							<div contenteditable="true" class="col-xs-5"><strong>Bank account:</strong></div>
+							<div contenteditable="true" class="col-xs-12">PG-1234-560-3</div>
+						</div>
+
+						<div class="row">
+							<div contenteditable="true" class="col-xs-5"><strong>Receiver:</strong></div>
+							<div contenteditable="true" class="col-xs-12">Your Company, probably</div>
+						</div>
+
+						<div class="row">
+							<div contenteditable="true" class="col-xs-5"><strong>Use OCR-number:</strong></div>
+							<div contenteditable="true" class="col-xs-12">514062356191550988</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Final notes -->
+				<div id="footer" class="footer row" style="margin-bottom: 0;">
+					<div contenteditable="true" class="col-xs-6">COMPANY</div>
+					<div contenteditable="true" class="col-xs-6">contact@company.com</div>
+					<div contenteditable="true" class="col-xs-8">company reg. number</div>
+				</div>
 			</div>
 
 			<div class="container no-print">
 				<div class="row row-spacing">
-					<button id="print" type="button" class="btn btn-primary col-md-4 col-xs-4">Print</button>
-					<form class="form-inline col-md-2 col-xs-2">
-						<input id="currency" class="form-control" value="SEK"/>
-					</form>
+
+					<!-- Currency -->
+					<div class="col-xs-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Currency</h3>
+							</div>
+							<div class="panel-body">
+								<form role="form" >
+									<input id="currency" class="form-control" value="SEK">	
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- VAT option -->
+					<div class="col-xs-6">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-12">
+										<h3 class="panel-title">VAT</h3>
+									</div>
+									<label class="col-xs-12">
+								      	<input id="vat-enabled" type="checkbox" checked="true"> Enabled
+								    </label>
+								</div>
+							</div>
+							<div class="panel-body">
+						 		<form role="form">
+								  	<input class="form-control" id="vat-amount" value="0" placeholder="%">
+								  	<div style="margin: 0;" class="checkbox">
+								    
+								  	</div>
+						  		</form>
+						  	</div>
+						</div>
+					</div>
+
+					<!-- Load / Store -->
+					<div class="col-xs-4">
+						<button data-toggle="modal" data-target="#loadmodal" type="button"  class="btn btn-warning btn-block">Load Settings</button>
+						<button data-toggle="modal" data-target="#storemodal" type="button" class="btn btn-warning btn-block">Store Settings</button>
+					</div>
+
+					<!-- Print -->
+					<div class="col-xs-4">
+						<button id="print" type="button" class="btn btn-primary btn-block">Print</button>
+					</div>
+
 				</div>
 			</div>
 		</div>
 
+		<!-- Store settings modal -->
+		<div class="modal fade" id="storemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Store Settings</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<strong>WARNING: Storing settings will wipe previously stored settings.</strong><br>
+		      	Stored settings are: <strong>vat</strong> and <strong>contractor</strong>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" id="store">Save settings</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Load settings modal -->
+		<div class="modal fade" id="loadmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Load Settings</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<strong>WARNING: Loading settings will replace previously entered settings.</strong>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary" id="load">Load settings</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
 		<script src="js/script.js"></script>
 	</body>
 </html>

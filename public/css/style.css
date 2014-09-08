@@ -23,10 +23,16 @@ body {
 }
 
 .row-spacing {
-	margin: 1em 0;
+	margin-top: 1em;
 }
 
 @media print {    
+
+	.container {
+		padding-bottom: 0;
+		padding-top: 0;
+	}
+
 	.no-print, .no-print * {
 		display: none !important;
 	}
@@ -38,7 +44,11 @@ body {
 	.faktura {
 		box-shadow: none !important;
 		border: none !important;
-	}
+	}   
+}
+
+.footer, #footer {
+	border-top: 1px solid black;
 }
 
 h4 {
@@ -48,3 +58,5 @@ h4 {
 .remove {
 	float: left;
 }
+
+
