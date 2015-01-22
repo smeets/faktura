@@ -56,7 +56,7 @@ $("#store").click(function () {
 		// Store page footer
 		localStorage['footer'] = $("#footer").html()
 	} else {
-		console.log("browser does not support :((")
+		alert("browser does not support :((")
 	}
 
 	$('#storemodal').modal('hide')
@@ -72,7 +72,7 @@ $("#load").click(function () {
 		$("#faktura-footer").html(localStorage['faktura-footer'])
 		$("#footer").html(localStorage['footer'])
 	} else {
-		console.log("browser does not support :((")
+		alert("browser does not support :((")
 	}
 
 	$('#loadmodal').modal('hide')
@@ -98,11 +98,26 @@ $("#currency").focusout(function () {
 	calculateTotal()
 })
 
+// Create new stylesheet that holds the print styling
+var sheet = (function() {
+    var style = document.createElement("style");
+
+    style.setAttribute("media", "print")
+
+    // WebKit hack :(
+    style.appendChild(document.createTextNode(""));
+
+    document.head.appendChild(style);
+
+    return style.sheet;
+})();
+
 $("#print").click(function () {
-	// Hack the shiet out of the element 8D
-	document.querySelector('style').textContent +=
-  		"@media print { #footer { margin-top: calc(298mm - 4mm - " + $("#footer").offset().top + "px - " + $("#footer").height() * 2 + "px); }}"
-	window.print()
+	// Insert new print styling, overwriting existing rule
+	sheet.insertRule(
+  		"#footer { margin-top: calc(298mm - 4mm - " + $("#footer").offset().top + "px - " + $("#footer").height() * 2 + "px); }"
+	, 0)
+    window.print()
 })
 
 $("#add-item").click(function () {

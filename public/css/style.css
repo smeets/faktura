@@ -6,6 +6,11 @@ body {
 	background-color: #fff;
 }
 
+@page {
+            size: auto;   /* auto is the current printer page size */
+            margin: 0mm;  /* this affects the margin in the printer settings */
+        }
+
 .faktura {
 	background: #fff;
 	border: 1px solid #D0D0D0;
