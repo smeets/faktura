@@ -1,67 +1,30 @@
-body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size: 14px;
-	line-height: 1.42857143;
-	color: #333;
-	background-color: #fff;
-}
-
-@page {
-            size: auto;   /* auto is the current printer page size */
-            margin: 0mm;  /* this affects the margin in the printer settings */
-        }
-
-.faktura {
-	background: #fff;
-	border: 1px solid #D0D0D0;
-	padding: 20px;
-	box-shadow: 2px 2px 5px #DDD;
-}
-
-.faktura-header {
-	border-bottom: 1px solid black;
-}
-
-.faktura-footer {
-	border-bottom: 1px solid black;
-	border-top: 1px solid black;
-}
-
-.row-spacing {
-	margin-top: 1em;
-}
-
-@media print {    
-
-	.container {
-		padding-bottom: 0;
-		padding-top: 0;
+@media screen {
+	html, body, .container {
+		width: 768px;
+		margin: 0 auto;
 	}
+}
+.footer {
 
-	.no-print, .no-print * {
-		display: none !important;
+}
+.relative-top {
+	position: absolute;
+	top: 0;
+	left: -12px;
+}
+.relative-left {
+	position: absolute;
+	left: -12px;
+	width: 100%;
+}
+.relative-right {
+	position: absolute;
+	right: -12px;
+}
+@media print {
+	.footer {
+		width: 100%;
+		position: fixed;
+		bottom: 0;
 	}
-
-	.extra-space {
-		width: 45.83333333%;
-	}
-
-	.faktura {
-		box-shadow: none !important;
-		border: none !important;
-	}   
 }
-
-.footer, #footer {
-	border-top: 1px solid black;
-}
-
-h4 {
-	margin-bottom: 0.5em;
-}
-
-.remove {
-	float: left;
-}
-
-

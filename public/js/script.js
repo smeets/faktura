@@ -1,168 +1,166 @@
-/** Faktura -- v 1.0 -- Copyright (c) 2014 Axel Smeets */
+/** Faktura -- v 1.1 -- Copyright (c) 2016 Axel Smeets */
 
-var currentItemId = 0
-
-// Does not return a string!
-function formatValue(value) {
-	var fixed = value.toFixed(2)
-
-	if (fixed > 1000) {
-		var thousands = Math.floor(fixed / 1000),
-		hundreds = fixed - thousands * 1000
-
-		if (hundreds < 100)
-			if (hundreds < 10)
-				hundreds = "00" + hundreds
-			else
-				hundreds = "0" + hundreds
-
-		fixed = thousands + " " + hundreds
-	}
-
-	return fixed
+function tryRegexExec(str, regex) {
+	var res = regex.exec(str)
+	if (res)
+		return res[0]
+	else
+		return undefined
 }
 
-function calculateTotal(){
-	var vat = 0,
-		sum = 0
-		
-	for (var i = 0; i < currentItemId; i++) {
-		sum += parseInt( $("#item-" + i + "-total").text().replace(" ", "") )
-	}
-
-	if ($("#vat-enabled").attr('checked')) {
-		vat = sum * parseInt($("#vat-amount").val().replace("%", "")) * 0.01
-		$("#vat-2").text(formatValue(vat))
-	} 
-
-	$("#sum").text(formatValue(sum))
-	$("#grand-total").text(formatValue(sum + vat) + " " + $("#currency").val())
+function parseNumber(str) {
+	return parseFloat(tryRegexExec(str, /[0-9\.\,]+/g) || 0)
 }
 
-// Grab stuff from invoice and put it in local storage
-$("#store").click(function () {
-	if (window.localStorage) {
-		// Store the actual html markup
-		localStorage['contractor'] = $("#contractor").html()
+function parsePriceCurrency(str) {
+	return tryRegexExec(str, /[^0-9\.\,]+/g) || ''
+}
 
-		// Store VAT settings
-		localStorage['vat-enabled'] = $("#vat-enabled").attr('checked')
-		localStorage['vat-amount'] = $("#vat-amount").val()
+function formatNumber(nbr) {
+	return nbr.toFixed(2)
+}
 
-		// Store invoice header && footer
-		localStorage['faktura-header'] = $("#faktura-header").html()
-		localStorage['faktura-footer'] = $("#faktura-footer").html()
+function formatValue(nbr, curr, after) {
+	if (after)
+		return formatNumber(nbr) + curr
+	else
+		return curr + formatNumber(nbr)
+}
 
-		// Store page footer
-		localStorage['footer'] = $("#footer").html()
-	} else {
-		alert("browser does not support :((")
+function $(query) {
+	return document.querySelector(query)
+}
+
+function calcRow(row) {
+	var children = row.childNodes
+
+	var qty = children[2].textContent
+	var price = children[3].textContent
+
+	return parseNumber(qty) * parseNumber(price)
+}
+
+function recalcRow(evt) {
+	var children = this.parentNode.childNodes
+	//var item = children[1]
+	var price = children[3].textContent
+	var total = children[4]
+	var curr = parsePriceCurrency(price)
+
+	var cost = calcRow(this.parentNode)
+
+	total.textContent = formatValue(cost, curr, price.indexOf(curr))
+}
+
+function recalcTotal(evt) {
+	var list = $('#table-body')
+	var rows = list.childNodes
+	var subtotal = 0
+	var curr = ''
+	var after = false
+
+	for (var i = 0; i < rows.length; i++) {
+		var price = rows[i].childNodes[3].textContent
+		curr = curr || parsePriceCurrency(price)
+		after = price.indexOf(curr) > 0
+
+		subtotal += calcRow(rows[i])
 	}
 
-	$('#storemodal').modal('hide')
-})
 
-// Grab stuff from local storage and put it in invoice
-$("#load").click(function () {
-	if (window.localStorage) {
-		$("#contractor").html(localStorage['contractor'])
-		$("#vat-enabled").attr('checked', localStorage['vat-enabled'])
-		$("#vat-amount").val(localStorage['vat-amount'])
-		$("#faktura-header").html(localStorage['faktura-header'])
-		$("#faktura-footer").html(localStorage['faktura-footer'])
-		$("#footer").html(localStorage['footer'])
-	} else {
-		alert("browser does not support :((")
+	var vat = parseNumber($('#vats').textContent) * 0.01
+	var total = subtotal + subtotal * vat
+
+	$('#subtotal').textContent = formatValue(subtotal, curr, after)
+	if (vat != 0.0)
+		$('#vat').parentNode.classList.remove('hidden')
+	else
+		$('#vat').parentNode.classList.add('hidden')
+	$('#vat').textContent = formatValue(subtotal*vat, curr, after)
+	$('#total').textContent = formatValue(total, curr, after)
+}
+
+function remove(evt) {
+	this.parentNode.parentNode.removeChild(this.parentNode)
+	recalcTotal()
+}
+
+function makeButton(glyph, side, handler) {
+	var btn = el('div.relative-' + side + '.hidden-print', [
+		el('button.btn.btn-default.btn-xs', [
+			el('i.glyphicon.glyphicon-' + glyph)
+		])
+	])
+	btn.addEventListener('click', handler, false)
+	return btn
+}
+
+function makeItemField(div, editable, dorecalc) {
+	var field = el(div, ['000'])
+
+	if (editable)
+		field.setAttribute('contenteditable', 'true')
+
+	if (dorecalc) {
+		field.addEventListener('keyup', recalcRow, false)
+		field.addEventListener('focusout', recalcTotal, false)
 	}
 
-	$('#loadmodal').modal('hide')
-})
+	return field
+}
 
-$("#vat-amount").focusout(function () {
-	var text = $("#vat-1").text()
+function add() {
+	$('#table-body').appendChild(
+		el('div.row', [
+			makeButton('minus', 'left', remove),
+			makeItemField('div.col-xs-5', true, false),
+			makeItemField('div.col-xs-2.text-right', true, true),
+			makeItemField('div.col-xs-2.text-right', true, true),
+			makeItemField('div.col-xs-3.text-right', false, false),
+			makeButton('refresh', 'right', recalcRow)
+		])
+	)
+}
 
-	if (text.indexOf("(") >= 0 && text.indexOf(")") >= 0) {
-		$("#vat-1").text(text.substr(0, text.indexOf("(")) + "(" + $('#vat-amount').val() + "%)")
-	}
+function storableFields() {
+	return [
+		'#label-mycompany',
+		'#label-yourcompany',
+		'#label-contractor',
+		'#label-contractee',
+		'#label-myreference',
+		'#label-yourreference',
+		'#label-total',
+		'#label-subtotal',
+		'#label-vat',
+		'#label-account',
+		'#label-receiver',
+		'#label-footer',
+		'#vats'
+	]
+}
 
-	calculateTotal()
-})
-
-$("#vat-enabled").change(function () {
-	$("#vat-1").toggle()
-	$("#vat-2").toggle()
-	calculateTotal()
-})
-
-$("#currency").focusout(function () {
-	calculateTotal()
-})
-
-// Create new stylesheet that holds the print styling
-var sheet = (function() {
-    var style = document.createElement("style");
-
-    style.setAttribute("media", "print")
-
-    // WebKit hack :(
-    style.appendChild(document.createTextNode(""));
-
-    document.head.appendChild(style);
-
-    return style.sheet;
-})();
-
-$("#print").click(function () {
-	// Insert new print styling, overwriting existing rule
-	sheet.insertRule(
-  		"#footer { margin-top: calc(298mm - 4mm - " + $("#footer").offset().top + "px - " + $("#footer").height() * 2 + "px); }"
-	, 0)
-    window.print()
-})
-
-$("#add-item").click(function () {
-	var id = currentItemId++
-
-	var div = $("<div>").addClass("row").attr("id", "item-" + id),
-		art = $("<p>").addClass("col-xs-10 extra-space").text("artikel").attr("contenteditable", "true"),
-		units = $("<p>").addClass("col-xs-3").text("1").attr("contenteditable", "true")
-				.attr("id", "item-" + id + "-units"),
-		unit = $("<p>").addClass("col-xs-3").text("st").attr("contenteditable", "true"),
-		price = $("<p>").addClass("col-xs-3").text("0").attr("contenteditable", "true")
-				.attr("id", "item-" + id + "-price"),
-		total = $("<p>").addClass("col-xs-3").text("0").attr("id", "item-" + id + "-total"),
-		remove = $("<span>").addClass("glyphicon glyphicon-minus btn btn-xs btn-danger no-print remove col-xs-1")
-
-	div.append(remove, art, units, unit, price, total)
-	
-	remove.click(function () {
-		div.remove()
-
-		// Shift newer items down a notch
-		for (var i = id + 1; i < currentItemId; i++) {
-			var elem = $("#item-" + i)
-			if (elem) {
-				$("#item-" + i + "-units").attr("id", "item-" + ( i - 1) + "-units")
-				$("#item-" + i + "-price").attr("id", "item-" + ( i - 1) + "-price")
-				$("#item-" + i + "-total").attr("id", "item-" + ( i - 1) + "-total")
-			}
-		}
-
-		currentItemId -= 1
+function save(evt) {
+	storableFields().forEach(function(id) {
+		window.localStorage[id] = $(id).innerHTML
 	})
+}
 
-	units.focusout(function (e) {
-		total.text( formatValue(parseInt(units.text()) * parseInt(price.text())) )
-		calculateTotal()
+function load(evt) {
+	storableFields().forEach(function(id) {
+		$(id).innerHTML = window.localStorage[id]
 	})
+}
 
-	price.focusout(function (e) {
-		total.text( formatValue(parseInt(units.text()) * parseInt(price.text())) )
-		calculateTotal()
-	})
+window.onload = function() {
+	$('#add').addEventListener('click', add, false)
 
-	$("#items").append(div)
-})
+	$('#vats').addEventListener('keyup', recalcTotal, false)
 
-// Initialize
-calculateTotal()
+	$('#print').addEventListener('click', function(){window.print()}, false)
+
+	$('#save').addEventListener('click', save, false)
+	$('#load').addEventListener('click', load, false)
+
+	recalcTotal()
+}
